@@ -1,7 +1,6 @@
 const { Client } = require('pg');
 const uuid = require('uuid');
-const faker = require('faker');
-const client = new Client('postgres://localhost/acme-posts-comments');
+const client = new Client('postgres://localhost/acme_posts_comments');
 client.connect();
 
 const generateIds = (...names) => {
@@ -11,37 +10,33 @@ const generateIds = (...names) => {
   }, {});
 };
 
-const ids = generateIds('moe', 'larry', 'curly', 'shep', 'lucy', 'it', 'marketing', 'hr', 'sales', 'usersWithNoDepartments');
+const ids = generateIds('node', 'express', 'react', 'tag1', 'tag2', 'tag3');
 
 const SQL = `
-  DROP TABLE IF EXISTS users;
-  DROP TABLE IF EXISTS departments;
+  DROP TABLE IF EXISTS tags;
+  DROP TABLE IF EXISTS posts;
 
-  CREATE TABLE departments(
+  CREATE TABLE posts(
     id UUID PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL
   );
 
-  CREATE TABLE users(
+  CREATE TABLE tags(
     id UUID PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     bio TEXT,
-    department_id UUID references departments(id)
+    posts_id UUID references posts(id)
   );
 
-  INSERT INTO departments(id, name) values('${ids.hr}', 'HR');
-  INSERT INTO departments(id, name) values('${ids.sales}', 'Sales');
-  INSERT INTO departments(id, name) values('${ids.marketing}', 'Marketing');
-  INSERT INTO departments(id, name) values('${ids.it}', 'IT');
+  INSERT INTO posts(id, name) values('${ids.node}', 'Node');
+  INSERT INTO posts(id, name) values('${ids.express}', 'Express');
+  INSERT INTO posts(id, name) values('${ids.react}', 'React');
 
-  INSERT INTO users(id, name, department_id, bio) values('${ids.moe}', 'moe', '${ids.hr}', '${faker.lorem.paragraph(2)}');
-  INSERT INTO users(id, name, department_id, bio) values('${ids.larry}', 'larry', '${ids.hr}', '${faker.lorem.paragraph(2)}');
-  INSERT INTO users(id, name, department_id, bio) values('${ids.curly}', 'curly', '${ids.sales}', '${faker.lorem.paragraph(2)}');
-  INSERT INTO users(id, name, department_id, bio) values('${ids.lucy}', 'lucy', '${ids.it}', '${faker.lorem.paragraph(2)}');
-  INSERT INTO users(id, name, department_id, bio) values('${ids.shep}', 'shep', '${faker.lorem.paragraph(2)}');
+  INSERT INTO tags(id, name, posts_id) values('${ids.tag1}', 'node', '${ids.node}');
+  INSERT INTO tags(id, name, posts_id, bio) values('${ids.tag2}', 'express', '${ids.express}', 'Challenging');
+  INSERT INTO tags(id, name, posts_id, bio) values('${ids.tag3}', 'react', '${ids.react}', 'Loved it');
 
 `
-
 const syncAndSeed = async () => {
   try {
     await client.query(SQL);
@@ -52,12 +47,12 @@ const syncAndSeed = async () => {
 }
 
 const findAllTags = async () => {
-  const response = await client.query('Select * FROM users;');
+  const response = await client.query('Select * FROM tags;');
   return response.rows;
 }
 
 const findAllPosts = async () => {
-  const response = await client.query('Select * FROM departments;');
+  const response = await client.query('Select * FROM posts;');
   return response.rows;
 }
 
