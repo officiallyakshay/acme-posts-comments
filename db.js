@@ -18,23 +18,21 @@ const SQL = `
 
   CREATE TABLE posts(
     id UUID PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL
+    topic VARCHAR(255) UNIQUE NOT NULL
   );
 
   CREATE TABLE tags(
     id UUID PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    bio TEXT,
-    posts_id UUID references posts(id)
+    text VARCHAR(255) UNIQUE NOT NULL,
+    post_id UUID references posts(id)
   );
 
-  INSERT INTO posts(id, name) values('${ids.node}', 'Node');
-  INSERT INTO posts(id, name) values('${ids.express}', 'Express');
-  INSERT INTO posts(id, name) values('${ids.react}', 'React');
+  INSERT INTO posts(id, topic) values('${ids.node}', 'node');
+  INSERT INTO posts(id, topic) values('${ids.express}', 'express');
+  INSERT INTO posts(id, topic) values('${ids.react}', 'react');
 
-  INSERT INTO tags(id, name, posts_id) values('${ids.tag1}', 'node', '${ids.node}');
-  INSERT INTO tags(id, name, posts_id, bio) values('${ids.tag2}', 'express', '${ids.express}', 'Challenging');
-  INSERT INTO tags(id, name, posts_id, bio) values('${ids.tag3}', 'react', '${ids.react}', 'Loved it');
+  INSERT INTO tags(id, text, post_id) values('${ids.tag2}', 'Challenging', '${ids.express}');
+  INSERT INTO tags(id, text, post_id) values('${ids.tag3}', 'Loved it', '${ids.react}');
 
 `
 const syncAndSeed = async () => {

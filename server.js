@@ -15,10 +15,6 @@ app.get('/api/posts', (req, res, next)=> {
     .catch(next);
 });
 
-app.get('/api/posts/:id', (req, res, next) => {
-
-});
-
 app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')));
 
 syncAndSeed()
