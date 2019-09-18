@@ -33,7 +33,7 @@ const SQL = `
 
   INSERT INTO tags(id, text, post_id) values('${ids.tag2}', 'Challenging', '${ids.express}');
   INSERT INTO tags(id, text, post_id) values('${ids.tag3}', 'Loved it', '${ids.react}');
-
+  INSERT INTO tags(id, text, post_id) values('${ids.tag1}', 'What??', '${ids.react}');
 `
 const syncAndSeed = async () => {
   try {
